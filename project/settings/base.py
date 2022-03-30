@@ -61,12 +61,6 @@ MIDDLEWARE_CLASSES = [
 # compressing static files with gzip functionality
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestSaticFilesStorage'
 
-
-
-SECURE_SSL_REDIRECT = False
-SESSION_COOKIE_SECURE = True
-CSRF_COOKIE_SECURE = True
-
 ROOT_URLCONF = 'project.urls'
 
 TEMPLATES = [

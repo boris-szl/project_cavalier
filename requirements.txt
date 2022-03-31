@@ -10,3 +10,4 @@ sqlparse==0.4.2
 gunicorn==20.1.0
 whitenoise==6.0.0
 psycopg2==2.9.3
+yfinance==0.1.67

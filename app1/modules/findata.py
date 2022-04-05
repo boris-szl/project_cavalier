@@ -22,6 +22,38 @@ def getBetaData():
     df_beta = df_beta.drop(0)
     return df_beta
 
+# either i create a new module or i merge this with
+# getBetaData(), more likely to merge it with the function
+def cleaningBetaData(dataframe):
+    beta_data = dataframe
+    beta_data = beta_data.set_index('Industry Name')
+    # remove whitespace in index
+    old_index = beta_data.index
+    new_index = []
+    for i in old_index:
+        new_index.append(" ".join(i.split()))
+    # replace value in new_index
+    tuple_1 = [("Financial Svcs. (Non-bank & Insuran", "Financial Services (Non-bank  & Insurance)"),
+          ("Healthcare Information and Technol","Healthcare Information and Technology"),
+           ("Oil/Gas (Production and Exploratio", "Oil/Gas (Production and Exploration)"),
+           ("Oilfield Svcs/Equip.", "Oilfield Services/Equipment"),
+           ("R.E.I.T", "Real Estate Investment Trust"),
+           ("Restaurant/Dining", "Restaurants"),
+           ("Rubber& Tires", "Rubber & Tires"),
+          ("Semiconductor Equip", "Semiconductor Equipment"),
+          ("Software, System & Application", "Software System & Application"),
+          ("Telecom (Wireless)", "Telecommunication (Wireless)"),
+          ("Telecom. Equipment", "Telecommunication Equipment"),
+          ("Telecom. Services", "Telecommunication Services"),
+          ("Total Market (without financials)", "Total Market (excl. Financials)")]
+    for i in range(len(tuple_1)):
+        new_index = [w.replace(tuple_1[i][0], tuple_1[i][1]) for w in new_index]
+        
+    # df.set_index([pd.Index([1, 2, 3, 4]), 'year'])
+    beta_data = beta_data.set_index([pd.Index(new_index)])
+    return beta_data
+
+
 def getUnleveredBeta():
     df = getBetaData().T
     df = df.iloc[[0,5,15,14,13,12,11]]

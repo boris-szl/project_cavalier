@@ -35,8 +35,9 @@
 			</nav>
 
 		<!-- JUMBOTRON -->
-		<div class="jumbotron">
-		  <h1 class="display-5">Welcome to Metrix!</h1>
+        <div id="particles-js"></div>
+        <div class="jumbotron" id="particles-js">
+		  <h1 class="display-5">Welcome to Metrixx Labs!</h1>
 		  <p class="lead">Metrix is a collection of financial projects.</p>
 		  <hr class="my-2">
 		  <p>Learn more about the current available tools as well as the tools in development</p>
@@ -77,10 +78,68 @@
 			</table>
 		</div>
 
+        <div class="container px-4 py-5" id="featured-3">
+            <h2 class="pb-2 border-bottom">Columns with icons</h2>
+            <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+                <div class="feature col">
+                    <div class="feature-icon bg-primary bg-gradient">
+                        <svg class="bi" width="1em" height="1em"><use xlink:href="#collection"/></svg>
+                    </div>
+                    <h2>Moat</h2>
+                    <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+                        <a href="#" class="icon-link">
+                            Call to action
+                            <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
+                        </a>
+                </div>
+                <div class="feature col">
+                    <div class="feature-icon bg-primary bg-gradient">
+                            <svg class="bi" width="1em" height="1em"><use xlink:href="#people-circle"/></svg>
+                    </div>
+                    <h2>Parsr</h2>
+                    <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+                    <a href="#" class="icon-link">
+                                Call to action
+                                    <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
+                    </a>
+                </div>
+                <div class="feature col">
+                    <div class="feature-icon bg-primary bg-gradient">
+                                <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"/></svg>
+                    </div>
+                    <h2>Obsidian</h2>
+                    <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
+                    <a href="#" class="icon-link">
+                                Call to action
+                        <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
+                    </a>
+                </div>
+            </div>
+        </div>
 
+    <div class="container">
+        <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
+            <p class="col-md-4 mb-0 text-muted">&copy; 2021 Company, Inc</p>
+
+            <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
+                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
+            </a>
+
+            <ul class="nav col-md-4 justify-content-end">
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
+                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+            </ul>
+        </footer>
+    </div>  
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+    <script src="{% static 'js/app.js' %}"></script>
+    <script src="{% static 'js/particles.js' %}"></script>
+    <script src="http://www.jsdelivr.com/#!particles.js"></script> 
 	</body>
 </html>

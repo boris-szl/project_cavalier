@@ -14,7 +14,7 @@ def getCurrentRiskFreeRate():
     data = getRiskFreeRateMonth()
     return np.double(data.iloc[-1,[1]])/100
 
-def betaData():
+def getBetaData():
     URL2 = "http://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/Betas.html"
     beta_table = pd.read_html(URL2)
     df_beta = beta_table[0]
@@ -22,8 +22,8 @@ def betaData():
     df_beta = df_beta.drop(0)
     return df_beta
 
-def unleveredBeta():
-    df = betaData().T
+def getUnleveredBeta():
+    df = getBetaData().T
     df = df.iloc[[0,5,15,14,13,12,11]]
     df = df.T
     df = df.set_index('Industry Name')
@@ -39,10 +39,10 @@ def getIndustryNames():
     return betaData()
 
 def getUnleveredBeta(industry="Total Market", year=dt.date.today().year):
-    data = unleveredBeta()
+    data = getUinleveredBeta()
     return np.double(data.loc[industry,year])
 
-def capitalCosts():
+def getCapitalCosts():
     URL4 = "http://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/wacc.html"
     coc_table = pd.read_html(URL4)
     df_coc = coc_table[0]

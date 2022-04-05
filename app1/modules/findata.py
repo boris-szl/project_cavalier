@@ -2,6 +2,9 @@ import pandas as pd
 import datetime as dt
 import numpy as np
 
+# to do 
+# rename functions to conventional use
+
 def getRisFreeRateUS():
     return 0
 

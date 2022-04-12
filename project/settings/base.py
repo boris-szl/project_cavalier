@@ -139,3 +139,11 @@ STATICFILES_FINDERS = ['compressor.finders.CompressorFinder']
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# compress precompilers
+# Compresses linked and inline JavaScript or CSS into a single cached file.
+COMPRESS_PRECOMPILERS = (
+            ('text/x-scss', 'django_libsass.SassCompiler'),
+        )
+
+

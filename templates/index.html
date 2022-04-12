@@ -1,5 +1,4 @@
 {% load static %}
-{% load compress %}
 
 
 <!DOCTYPE html>
@@ -9,11 +8,12 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1">
 		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+        {% load compress %}
         {% compress css %}
-             <link type="text/x-scss" href="{% static 'bootstrap/bootstrap.scss' %}" rel="stylesheet" media="screen">
+        <link type="text/x-scss" href="{% static 'bootstrap/bootstrap.scss' %}" rel="stylesheet" media="screen">
+        <link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet">
         {% endcompress %}
-
+        
         <title>
 
 		</title>
@@ -45,16 +45,13 @@
 
 		<!-- JUMBOTRON -->
         <div id="particles-js"></div>
-        <div class="jumbotron" id="particles-js">
-		  <h1 class="display-5">Welcome to Metrixx Labs!</h1>
-		  <p class="lead">Metrix is a collection of financial projects.</p>
-		  <hr class="my-2">
-		  <p>Learn more about the current available tools as well as the tools in development</p>
-		  <p class="lead">
-		    <a class="btn btn-primary btn-sm" href="#" role="button">Learn more</a>
-		  </p>
-		</div>
-
+		    <h1 class="display-5">Welcome to Metrixx Labs!</h1>
+		    <p class="lead">Metrix is a collection of financial projects.</p>
+		    <hr class="my-2">
+		    <p>Learn more about the current available tools as well as the tools in development</p>
+		    <p class="lead">
+		        <a class="btn btn-primary btn-sm" href="#" role="button">Learn more</a>
+		    </p>
 		<!-- TABLE -->
 		<div class="container-fluid">
 			<h2>ROIC Lookup</h2>
@@ -86,6 +83,8 @@
 			  </tbody>
 			</table>
 		</div>
+    </section>
+
 
         <div class="container px-4 py-5" id="featured-3">
             <h2 class="pb-2 border-bottom">Columns with icons</h2>
@@ -149,6 +148,11 @@
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
     <script src="{% static 'js/app.js' %}"></script>
     <script src="{% static 'js/particles.js' %}"></script>
-    <script src="http://www.jsdelivr.com/#!particles.js"></script> 
+    <script src="http://www.jsdelivr.com/#!particles.js"></script>
+    <script>
+        particlesJS.load('particles-js', '{% static 'json/particles.json' %}', function(){
+            console.log('particles.json loaded...');
+        });
+    </script>
 	</body>
 </html>

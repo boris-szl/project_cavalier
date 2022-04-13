@@ -13,6 +13,8 @@
         <link type="text/x-scss" href="{% static 'bootstrap/bootstrap.scss' %}" rel="stylesheet" media="screen">
         <link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet">
         {% endcompress %}
+
+        <script src="https://kit.fontawesome.com/23a092dfca.js" crossorigin="anonymous"></script>
         
         <title>
 
@@ -34,7 +36,7 @@
 	        				<a class="nav-link" href="">Home<span class="sr-only">(current)</span></a>
 	      				</li>
 	      				<li class="nav-item">
-	       		 			<a class="nav-link" href="#">Projects</a>
+	       		 			<a class="nav-link" href="#projects">Projects</a>
 	      				</li>
 	      				<li class="nav-item">
 	        				<a class="nav-link" href="#">About</a>
@@ -45,15 +47,18 @@
 
 		<!-- JUMBOTRON -->
         <div id="particles-js"></div>
+
+        <div class="jumbotron">
 		    <h1 class="display-5">Welcome to Metrixx Labs!</h1>
-		    <p class="lead">Metrix is a collection of financial projects.</p>
+		    <p class="lead">Metrixx Labs is a collection of OSINT projects</p>
 		    <hr class="my-2">
-		    <p>Learn more about the current available tools as well as the tools in development</p>
-		    <p class="lead">
-		        <a class="btn btn-primary btn-sm" href="#" role="button">Learn more</a>
-		    </p>
+		    <p>Read more about our latest and upcoming projects.</p>
+            <a class="btn btn-primary btn-sm" href="#projects">Read more</a>
+        </div>
+
+
 		<!-- TABLE -->
-		<div class="container-fluid">
+		<div class="container">
 			<h2>ROIC Lookup</h2>
 			<p>Have a look at the Return On Invested Capital for the last four years of a NASDAQ listed company</p>
 			<form action="#" method="post">
@@ -63,7 +68,7 @@
 			    		<span class="input-group-text" id="inputGroup-sizing-default">Ticker Symbol</span>
 			  		</div>
 			  			<input type="text" class="form-control" name="ticker" maxlength="5" required>
-			  			<button class="btn btn-primary" type="sumbit">Submit</button>
+			  			<button class="btn btn-primary" type="submit">Submit</button>
 					</div>
 				</form>
 			<table class="table table-striped table-sm">
@@ -83,62 +88,59 @@
 			  </tbody>
 			</table>
 		</div>
-    </section>
 
-
-        <div class="container px-4 py-5" id="featured-3">
-            <h2 class="pb-2 border-bottom">Columns with icons</h2>
+    <!-- PROJECTS -->
+    <div id="projects">
+        <div class="container px-4 py-5">
+            <h2 class="pb-2 border-bottom">Projects</h2>
             <div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
                 <div class="feature col">
-                    <div class="feature-icon bg-primary bg-gradient">
-                        <svg class="bi" width="1em" height="1em"><use xlink:href="#collection"/></svg>
+                    <div class="feature-icon">
+                        <img src="{% static 'img/moat-logo.png' %}" height="125px" width="125px">
                     </div>
-                    <h2>Moat</h2>
                     <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                        <a href="#" class="icon-link">
-                            Call to action
-                            <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
-                        </a>
+                    <h5>Status:</h5><p>Version 0.1</p>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
                 </div>
                 <div class="feature col">
-                    <div class="feature-icon bg-primary bg-gradient">
-                            <svg class="bi" width="1em" height="1em"><use xlink:href="#people-circle"/></svg>
+                    <div class="feature-icon">
+                        <img src="{% static 'img/flow-logo.png' %}" height="125px" width="125px">
                     </div>
-                    <h2>Parsr</h2>
                     <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                    <a href="#" class="icon-link">
-                                Call to action
-                                    <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
-                    </a>
+                <h5>Status:</h5>
+                    <p>Work in Progress</>
+                    <div class="progress">
+                        <div class="progress-bar" role="progressbar" style="width: 50%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
                 </div>
                 <div class="feature col">
-                    <div class="feature-icon bg-primary bg-gradient">
-                                <svg class="bi" width="1em" height="1em"><use xlink:href="#toggles2"/></svg>
+                    <div class="feature-icon">
+                        <img src="{% static 'img/obsidian-logo.png' %}" width="125px" height="125px">
                     </div>
-                    <h2>Obsidian</h2>
                     <p>Paragraph of text beneath the heading to explain the heading. We'll add onto it with another sentence and probably just keep going until we run out of words.</p>
-                    <a href="#" class="icon-link">
-                                Call to action
-                        <svg class="bi" width="1em" height="1em"><use xlink:href="#chevron-right"/></svg>
-                    </a>
+                    <h5>Status:</h5>
+                    <p>Design phase</p>
+                    <div class="progress">
+  <div class="progress-bar" role="progressbar" style="width: 75%" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100"></div>
+</div>
                 </div>
             </div>
         </div>
+    </div>
 
+    <!-- FOOTER -->
     <div class="container">
         <footer class="d-flex flex-wrap justify-content-between align-items-center py-3 my-4 border-top">
-            <p class="col-md-4 mb-0 text-muted">&copy; 2021 Company, Inc</p>
-
-            <a href="/" class="col-md-4 d-flex align-items-center justify-content-center mb-3 mb-md-0 me-md-auto link-dark text-decoration-none">
-                <svg class="bi me-2" width="40" height="32"><use xlink:href="#bootstrap"/></svg>
-            </a>
+            <p class="col-md-4 mb-0 text-muted">&copy; 2022 Metrixx Labs</p>
 
             <ul class="nav col-md-4 justify-content-end">
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Home</a></li>
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Features</a></li>
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">Pricing</a></li>
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">FAQs</a></li>
-                <li class="nav-item"><a href="#" class="nav-link px-2 text-muted">About</a></li>
+                <li class="nav-item">
+                    <a class="nav-link" href="https://github.com/boris-szl">
+                        <i class="fa-brands fa-github" aria-hidden="true"></i>
+                    </a>
+                </li>
             </ul>
         </footer>
     </div>  

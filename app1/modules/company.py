@@ -40,8 +40,6 @@ class Company:
         
         # financials metrics
         
-        
-    
         # Currency
         self.currency = self.info['currency']
         
@@ -67,6 +65,24 @@ class Company:
         # Analysts recommendations
         self.analyst = self.ticker.recommendations
     
+    def getName(self):
+        return self.name
+
+    def getSector(self):
+        return self.sector
+
+    def getIndustry(self):
+        return self.industry
+
+    def getOpeningPrice(self):
+        return self.open
+
+    def getClosingPrice(self):
+        return self.close
+
+    def getBusinessDescription(self):
+        return self.business_description
+
     # income statement methods
     def getIncomeStatement(self):
         return self.income_statement
@@ -236,8 +252,8 @@ class Company:
         nopat = ebit + depreciation - income_taxes
         invested_capital = net_work_cap + ppe + goodwill
 
-        roic = nopat / invested_capital
-        return roic * 100
+        roic = ( nopat / invested_capital ) * 100
+        return roic
     
     def QuarterlyROIC(self):
         return 0

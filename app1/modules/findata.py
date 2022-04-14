@@ -141,7 +141,7 @@ def getERP():
 def getCountryERP(country='United States'):
     data = getERP().set_index("Country")
     value = data.T[country].to_numpy()
-    return np.double(value[0].strip('%'))/100#
+    return np.double(value[0].strip('%'))/100
 
 def calculateWacc(industry='Total Market', country='United States', year=dt.date.today().year):
     # get risk free rate

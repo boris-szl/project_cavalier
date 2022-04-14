@@ -2,25 +2,22 @@ import pandas as pd
 import datetime as dt
 import numpy as np
 
-# SOURCE FOR WORlDWIDE RISKFREERATE
-def getRiskFreeRate():
-    return 0
+# to do 
+# rename functions to conventional use
 
 def getRisFreeRateUS():
     return 0
 
-# US DATA
 def getRiskFreeRateMonth():
     URL = "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_long_term_rate&field_tdr_date_value_month=202202"
     table = pd.read_html(URL)
     return table[0].iloc[:,[0,3]]
 
-# US DATA
 def getCurrentRiskFreeRate():
     data = getRiskFreeRateMonth()
     return np.double(data.iloc[-1,[1]])/100
 
-def betaData():
+def getBetaData():
     URL2 = "http://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/Betas.html"
     beta_table = pd.read_html(URL2)
     df_beta = beta_table[0]
@@ -28,8 +25,40 @@ def betaData():
     df_beta = df_beta.drop(0)
     return df_beta
 
-def unleveredBeta():
-    df = betaData().T
+# either i create a new module or i merge this with
+# getBetaData(), more likely to merge it with the function
+def cleaningBetaData(dataframe):
+    beta_data = dataframe
+    beta_data = beta_data.set_index('Industry Name')
+    # remove whitespace in index
+    old_index = beta_data.index
+    new_index = []
+    for i in old_index:
+        new_index.append(" ".join(i.split()))
+    # replace value in new_index
+    tuple_1 = [("Financial Svcs. (Non-bank & Insuran", "Financial Services (Non-bank  & Insurance)"),
+          ("Healthcare Information and Technol","Healthcare Information and Technology"),
+           ("Oil/Gas (Production and Exploratio", "Oil/Gas (Production and Exploration)"),
+           ("Oilfield Svcs/Equip.", "Oilfield Services/Equipment"),
+           ("R.E.I.T", "Real Estate Investment Trust"),
+           ("Restaurant/Dining", "Restaurants"),
+           ("Rubber& Tires", "Rubber & Tires"),
+          ("Semiconductor Equip", "Semiconductor Equipment"),
+          ("Software, System & Application", "Software System & Application"),
+          ("Telecom (Wireless)", "Telecommunication (Wireless)"),
+          ("Telecom. Equipment", "Telecommunication Equipment"),
+          ("Telecom. Services", "Telecommunication Services"),
+          ("Total Market (without financials)", "Total Market (excl. Financials)")]
+    for i in range(len(tuple_1)):
+        new_index = [w.replace(tuple_1[i][0], tuple_1[i][1]) for w in new_index]
+        
+    # df.set_index([pd.Index([1, 2, 3, 4]), 'year'])
+    beta_data = beta_data.set_index([pd.Index(new_index)])
+    return beta_data
+
+
+def getUnleveredBeta():
+    df = getBetaData().T
     df = df.iloc[[0,5,15,14,13,12,11]]
     df = df.T
     df = df.set_index('Industry Name')
@@ -45,10 +74,10 @@ def getIndustryNames():
     return betaData()
 
 def getUnleveredBeta(industry="Total Market", year=dt.date.today().year):
-    data = unleveredBeta()
+    data = getUinleveredBeta()
     return np.double(data.loc[industry,year])
 
-def capitalCosts():
+def getCapitalCosts():
     URL4 = "http://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/wacc.html"
     coc_table = pd.read_html(URL4)
     df_coc = coc_table[0]
@@ -129,7 +158,3 @@ def calculateWacc(industry='Total Market', country='United States', year=dt.date
 
 def calculateWacc_2(industry='Total Market', country='United States', year=dt.date.today().year):
     return getRiskFreeRate() + getCountryERP(country) * getUnleveredBeta(industry,year) + getCostOfDebt()
-
-
-def nasdaqListedCompanyies():
-    return 0;

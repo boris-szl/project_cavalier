@@ -2,7 +2,7 @@ import pandas as pd
 import datetime as dt
 import numpy as np
 
-# to do 
+# to do
 # rename functions to conventional use
 
 def getRisFreeRateUS():
@@ -51,7 +51,7 @@ def cleaningBetaData(dataframe):
           ("Total Market (without financials)", "Total Market (excl. Financials)")]
     for i in range(len(tuple_1)):
         new_index = [w.replace(tuple_1[i][0], tuple_1[i][1]) for w in new_index]
-        
+
     # df.set_index([pd.Index([1, 2, 3, 4]), 'year'])
     beta_data = beta_data.set_index([pd.Index(new_index)])
     return beta_data
@@ -94,7 +94,7 @@ def getCostOfEquity(industry="Total Market"):
         return numerical_value
     else:
         return df["Cost of Equity"]
-    
+
 def getMarketCostOfCapital():
     df = capitalCosts()
     return np.double(df["Cost of Capital"][-2].strip("%"))/100
@@ -148,7 +148,7 @@ def calculateWacc(industry='Total Market', country='United States', year=dt.date
     risk_free_rate = getCurrentRiskFreeRate()
     # get countries equity risk premium
     risk_premium = getCountryERP(country)
-    # todays unlevered beta 
+    # todays unlevered beta
     unlevered_beta = getUnleveredBeta(industry,year)
     # cost of equity
     equity_cost = risk_premium * unlevered_beta + risk_free_rate

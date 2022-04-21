@@ -3,11 +3,13 @@ import numpy as np
 import yfinance as yf
 import re
 import datetime as dt
+import os, sys
 
 
 # from company import Company
 import findata as fd
 from company_test import Company
+sys.path.append(os.path.abspath(os.path.join('..', 'modules')))
 
 
 def inputTicker():
@@ -27,7 +29,7 @@ def main():
 	company = Company(x)
 	yearly_roic = company.calculateROIC()
 	quarterly_roic = company.QuarterlyROIC()
-	
+
 	wacc = fd.calculateWacc() * 100
 
 	print(yearly_roic)

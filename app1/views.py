@@ -102,14 +102,13 @@ def validate2(request):
 			# context = {
 			# 	'username' : username
 			# }
-	
 			df = pd.DataFrame(company.Company(ticker).calculateROIC())
 			df = setDateRows1(df)
 			df = df.reset_index()
 			df = df.set_axis(["Dates", "Values"], axis=1, inplace=False)
 			for i in range(df.shape[0]):
 				allData.append(dict(df.iloc[i]))
-	
+
 			context = { "data" : allData}
 			company_name = company.Company(ticker).getName()
 			company_sector = company.Company(ticker).getSector()
@@ -132,10 +131,6 @@ def validate2(request):
 		print("Invalid input")
 
 		return render(request, 'error.html')
-
-
-		
-	
 
 
 

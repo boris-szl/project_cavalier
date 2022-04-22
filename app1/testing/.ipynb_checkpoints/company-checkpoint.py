@@ -3,7 +3,7 @@ import yfinance as yf
 class Company:
     def __init__(self, ticker):
         self.ticker = yf.Ticker(ticker)
-
+        
         self.info = self.ticker.info
 
         # Company related information
@@ -12,20 +12,20 @@ class Company:
         self.sector = self.info['sector']
         self.industry = self.info['industry']
         self.business_description = self.info['longBusinessSummary']
-
+        
         self.actions = self.ticker.actions
         self.news = self.ticker.news
         # Show next event (earnings, etc)
         self.event = self.ticker.calendar
-
+        
         # Dividend and share price policy
         self.dividends = self.ticker.dividends
         self.splits = self.ticker.splits
-
+        
         # Ownership
         self.major_holders = self.ticker.major_holders
         self.institutional_holders = self.ticker.institutional_holders
-
+        
         # Stock price related information
         self.history = self.ticker.history
         self.fifty_two_week_high = self.info['fiftyTwoWeekHigh']
@@ -97,7 +97,7 @@ class Company:
     def getOptionChain(self,timeframe=None):
         # timeframe='YYYY-MM-DD'
         return self.option_chain()[0]
-    :
+    
     def getEbit(self):
         income_state
     

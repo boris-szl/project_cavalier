@@ -4,6 +4,8 @@ import yfinance as yf
 import re
 import datetime as dt
 import os, sys
+import requests
+import json
 
 
 # from company import Company
@@ -52,9 +54,11 @@ def main():
 	# print(fd.getRawBetaData())
 	# print(fd.getRawBetaData().columns)
 	# print(fd.getCleanedBetaData().columns)
-	print(fd.getUnleveredBeta())
+	# print(fd.getUnleveredBeta())
 	# print(fd.getUnleveredBeta().iloc[[1]])
-	print(fd.getUnleveredCleanedBeta())
+	# print(fd.getUnleveredCleanedBeta())
+	# print(fd.getRiskFreeRateForAustria())
+	print(fd.getRiskFreeRateEuroArea("DK", "DKK"))
 
 
 

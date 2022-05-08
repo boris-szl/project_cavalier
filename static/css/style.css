@@ -18,12 +18,11 @@ canvas {
 }
 
 .jumbotron {
-
+  height: auto;
 }
 
-
-.container-moat {
-    height: 350px;
+.cotainer container-moat {
+    height: 400px;
 }
 
 .container-about {

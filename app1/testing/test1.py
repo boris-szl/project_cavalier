@@ -58,7 +58,9 @@ def main():
 	# print(fd.getUnleveredBeta().iloc[[1]])
 	# print(fd.getUnleveredCleanedBeta())
 	# print(fd.getRiskFreeRateForAustria())
-	print(fd.getRiskFreeRateEuroArea("DK", "DKK"))
+	print(fd.getRiskFreeRateEuroArea("DE", "EUR"))
+	print(fd.getRiskFreeRateEuroArea("AT", "EUR"))
+
 
 
 

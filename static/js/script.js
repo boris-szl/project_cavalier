@@ -33,7 +33,7 @@ inputBox.onkeyup = (e)=> {
 function select(element) {
 	let selectUserData = element.textContent;
 	inputBox.value = selectUserData; // passing the user selected list data in textfield
-	
+
 	searchWrapper.classList.remove("active");
 }
 

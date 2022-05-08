@@ -15,6 +15,7 @@
     {% endcompress %}
 
     <script src="https://kit.fontawesome.com/23a092dfca.js" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
 	<title></title>
 </head>
 <body>
@@ -81,6 +82,24 @@
 			  </tbody>
 		</table>
 	</div>
+
+	<div id="vue-app">
+		<h1>[[ myTitle ]]</h1>
+		<button @click="count++">[[ count ]]</button>
+	</div>
+
+	<script type="text/javascript">
+		let app = new Vue({
+			el: "#vue-app",
+			// we are changing the delimiters because django uses {{...}}
+			delimiters: ['[[', ']]'],
+			data: {
+				myTitle: 'Hello Vue!',
+				count: 0,
+			},
+		});
+	</script>
+
 
 
 	<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>

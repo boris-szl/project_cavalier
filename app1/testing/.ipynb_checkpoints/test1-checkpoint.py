@@ -4,8 +4,6 @@ import yfinance as yf
 import re
 import datetime as dt
 import os, sys
-import requests
-import json
 
 
 # from company import Company
@@ -47,21 +45,8 @@ def main():
 	print(URL + str(date))
 	URL2 = "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_long_term_rate&field_tdr_date_value=" + str(date)
 	print(URL2)
-	# print(fd.getRiskFreeRateMonth())
-	# print(fd.getRiskFreeRateUs())
-	# print(fd.getCurrentRiskFreeRateUs())
-	# print(type(fd.getCurrentRiskFreeRateUs()))
-	# print(fd.getRawBetaData())
-	# print(fd.getRawBetaData().columns)
-	# print(fd.getCleanedBetaData().columns)
-	# print(fd.getUnleveredBeta())
-	# print(fd.getUnleveredBeta().iloc[[1]])
-	# print(fd.getUnleveredCleanedBeta())
-	# print(fd.getRiskFreeRateForAustria())
-	print(fd.getRiskFreeRateEuroArea("DE", "EUR"))
-	print(fd.getRiskFreeRateEuroArea("AT", "EUR"))
-
-
+	print(fd.getRiskFreeRateMonth())
+	print(type(fd.getCurrentRiskFreeRate()))
 
 
 if __name__ == "__main__":

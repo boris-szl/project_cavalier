@@ -80,7 +80,7 @@ def validate(request):
 		for i in range(df.shape[0]):
 			allData.append(dict(df.iloc[i]))
 
-		context = { "data" : allData}
+		context = {"data" : allData}
 
 	return render(request, 'index.html', {"data" : allData, "ticker" : ticker })
 

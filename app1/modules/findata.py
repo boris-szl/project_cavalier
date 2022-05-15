@@ -43,6 +43,14 @@ def getRiskFreeRateEuroArea(country_code, currency_code):
     except AssertionError as msg:
         print(msg)
 
+
+def getSwissRiskFreeRate():
+    # https://www.snb.ch/selector/en/mmr/intfeed/rss
+    return 0
+
+def getUsRiskFreeRate():
+    return 0
+
 # def getRiskFreeRateForNonEuroArea();
 
 # def getRiskFreeRateForEuroCountry();
@@ -235,6 +243,10 @@ def getCountryERP(country='United States'):
     data = getERP().set_index("Country")
     value = data.T[country].to_numpy()
     return np.double(value[0].strip('%'))/100
+
+def calculateEquityCost():
+    # equity_cost = risk_premium * unlevered_beta + risk_free_rate
+    return  0
 
 def calculateWacc(industry='Total Market', country='United States', year=dt.date.today().year):
     # get risk free rate

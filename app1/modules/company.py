@@ -48,7 +48,10 @@ class Company:
         self.income_statement = self.ticker.financials
         self.balance_sheet = self.ticker.balance_sheet
         self.cash_flow = self.ticker.cashflow
-        self.earnings = self.ticker.earnings
+        self.earnings = self.ticker.earnings["Earnings"]
+        self.revenue = self.ticker.earnings["Revenue"]
+        self.earnings_and_revenue = self.ticker.earnings
+
         # Quarter
         self.quarterly_is = self.ticker.quarterly_financials
         self.quarterly_bs = self.ticker.quarterly_balance_sheet
@@ -95,6 +98,14 @@ class Company:
 
     def getIncomeTaxes(self):
         return self.income_statement.loc['Income Tax Expense']
+
+    def getEarningsAndRevenue(self):
+        return self.earnings_and_revenue
+
+    def getRevenue(self):
+        df = self.revenue
+        return df.sort_index(ascending=False)
+
 
     # Balance Sheet Methods
     def getBalanceSheet(self):
@@ -184,8 +195,34 @@ class Company:
                 else:
                     pass
 
+    def getNopat(self):
+        return self.getEbit() + self.getDepreciation() + self.getIncomeTaxes()
+
+    def getNetWorkingCapital(self):
+        # net_work_cap = current_assets - current_liabilities
+        return self.getCurrentAssets() - self.getCurrentLiabilities()
+
+    def getInvestedCapital(self):
+        # invested_capital = net_work_cap + ppe + goodwill
+        return self.getNetWorkingCapital() + self.getPPE() + self.getGoodwill()
+
+    def calculateNopatMargin(self):
+        # getRevenue() yields a a pd.Series with dates : int as index
+        # wheres resetting the index creates a the default pd.DataFrame with
+        # column Year which holds int values
+        # in order to avoid changing the type while resetting, we drop the index
+        # hence eliminating the dates : int column
+        revenue = self.getRevenue().reset_index(drop=True)
+        nopat = self.getNopat().reset_index(drop=True)
+        return nopat / revenue
+
+    def calculateCapitalTurnover(self):
+        revenue = self.getRevenue().reset_index(drop=True)
+        invested_capital = self.getInvestedCapital().reset_index(drop=True)
+        return revenue / invested_capital
+
     def getEarnings(self):
-        return self.earnings
+        return self.earnings.sort_index(ascending=False)
 
     def getQuarterlyIncomeStatement(self):
         return self.quarterly_is
@@ -216,43 +253,50 @@ class Company:
     def __str__(self):
         return self.name
 
+    # OLD VERSION
+    # def calculateROIC(self):
+    #     #INCOME STATEMENT
+    #      # for operating income
+    #     operating_income = self.getOperatingIncome()
+    #      # for ebit
+    #     ebit = self.getEbit()
+    #      # for income taxes
+    #     income_taxes = self.getIncomeTaxes()
+
+    #     # BALANCE SHEET
+    #     current_assets = self.getCurrentAssets()
+    #      # for NIBCL
+    #     # total current liabilities
+    #     current_liabilities = self.getCurrentLiabilities()
+    #     # other current liabilities
+    #     other_current_liabilities = self.getOtherCurrentLiabilities()
+    #     # short term debt
+    #     short_term_debt = self.getShortTermDebt()
+    #      # for NPP&E
+    #     ppe = self.getPPE()
+    #      # for Goodwill
+    #     goodwill = self.getGoodwill()
+
+    #     # calculate Net Working Capital
+    #     net_work_cap = current_assets - current_liabilities
+
+    #     # CASH FLOW
+    #      # for depreciation
+    #     depreciation = self.getDepreciation()
+    #     # for capex
+    #     capex = self.getCapex()
+
+    #     nopat = ebit + depreciation - income_taxes
+    #     invested_capital = net_work_cap + ppe + goodwill
+
+    #     roic = ( nopat / invested_capital ) * 100
+    #     return roic
+
     def calculateROIC(self):
-        #INCOME STATEMENT
-         # for operating income
-        operating_income = self.getOperatingIncome()
-         # for ebit
-        ebit = self.getEbit()
-         # for income taxes
-        income_taxes = self.getIncomeTaxes()
+        return (self.getNopat().reset_index(drop=True)/self.getInvestedCapital().reset_index(drop=True)) * 100
 
-        # BALANCE SHEET
-        current_assets = self.getCurrentAssets()
-         # for NIBCL
-        # total current liabilities
-        current_liabilities = self.getCurrentLiabilities()
-        # other current liabilities
-        other_current_liabilities = self.getOtherCurrentLiabilities()
-        # short term debt
-        short_term_debt = self.getShortTermDebt()
-         # for NPP&E
-        ppe = self.getPPE()
-         # for Goodwill
-        goodwill = self.getGoodwill()
-
-        # calculate NWC
-        net_work_cap = current_assets - current_liabilities
-
-        # CASH FLOW
-         # for depreciation
-        depreciation = self.getDepreciation()
-        # for capex
-        capex = self.getCapex()
-
-        nopat = ebit + depreciation - income_taxes
-        invested_capital = net_work_cap + ppe + goodwill
-
-        roic = ( nopat / invested_capital ) * 100
-        return roic
+    def calculateRoicByMultiplication(self):
+        return self.calculateNopatMargin() * self.calculateCapitalTurnover()
 
     def QuarterlyROIC(self):
         return 0

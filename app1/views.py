@@ -31,6 +31,13 @@ def to_dict(df):
 		dict_data.append(dict(df.iloc[i]))
 	return dict_data
 
+
+def toDict(df):
+    dict_data = []
+    for i in range(df.shape[0]):
+        dict_data.append(dict(df.iloc[i]))
+    return dict_data
+
 # Create your views here.
 
 
@@ -96,25 +103,25 @@ def validate2(request):
 	price_change = None
 	allData = []
 	ticker = None
+
 	try:
 		if request.method == 'POST':
 			ticker = request.POST["ticker"]
-			# context = {
-			# 	'username' : username
-			# }
-			df = pd.DataFrame(company.Company(ticker).calculateROIC())
-			df = setDateRows1(df)
-			df = df.reset_index()
-			df = df.set_axis(["Dates", "Values"], axis=1, inplace=False)
-			for i in range(df.shape[0]):
-				allData.append(dict(df.iloc[i]))
+			target = company.Company(ticker)
+			list_year = list(target.getRevenue().reset_index()["Year"])
+			roic = target.calculateROIC()
+			nopat_margin = target.calculateNopatMargin()
+			capital_turnover = target.calculateCapitalTurnover()
+			df_output = pd.DataFrame(data={"Dates": list_year, "ROIC": roic, "NopatMargin" : nopat_margin, "CapitalTurnover" : capital_turnover})
 
+			allData = toDict(df_output)
 			context = { "data" : allData}
-			company_name = company.Company(ticker).getName()
-			company_sector = company.Company(ticker).getSector()
-			company_industry = company.Company(ticker).getIndustry()
-			opening_price = company.Company(ticker).getOpeningPrice()
-			closing_price = company.Company(ticker).getClosingPrice()
+
+			company_name = target.getName()
+			company_sector = target.getSector()
+			company_industry = target.getIndustry()
+			opening_price = target.getOpeningPrice()
+			closing_price = target.getClosingPrice()
 			price_change = np.round(( (closing_price / opening_price ) - 1 ) * 100, 2)
 
 		return render(request, 'test.html',

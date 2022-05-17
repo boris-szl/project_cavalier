@@ -16,6 +16,7 @@
 
     <script src="https://kit.fontawesome.com/23a092dfca.js" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.3.2/dist/echarts.min.js"></script>
 	<title></title>
 </head>
 <body>
@@ -42,8 +43,8 @@
 
 	<form action="#" method="post">
 		{% csrf_token %}
-<!-- 		<label for="ticker">Ticker Symbol:</label> -->
-<!-- 		<input type="text" id="ticker-symbol" name="ticker" maxlength="5"><br><br>
+<!-- 		<label for="ticker">Ticker Symbol:</label>
+		<input type="text" id="ticker-symbol" name="ticker" maxlength="5"><br><br>
 		<input type="submit"  value="submit"> -->
 
 		<div class="wrapper">
@@ -70,19 +71,29 @@
 			    <tr>
 			      <th scope="col">Date</th>
 			      <th scope="col">ROIC</th>
+			      <th scope="col">Nopat Margin</th>
+			      <th scope="col">Capital Turnover</th>
 			    </tr>
 			  </thead>
 			  <tbody>
 			  		{% for i in data %}
 			    	<tr>
 			      		<td>{{i.Dates}}</td>
-			      		<td>{{i.Values}}</td>
+			      		<td>{{i.ROIC}}</td>
+			      		<td>{{i.NopatMargin}}</td>
+			      		<td>{{i.CapitalTurnover}}</td>
 			    	</tr>
 			    {% endfor %}
 			  </tbody>
 		</table>
 	</div>
 
+	<div>
+		<h2>ROIC</h2>
+		{% for i in data %}
+		<h3>{{ i.Dates }}<h3>
+		{% endfor %}
+	</div>
 	<div id="vue-app">
 		<h1>[[ myTitle ]]</h1>
 		<button @click="count++">[[ count ]]</button>
@@ -99,6 +110,40 @@
 			},
 		});
 	</script>
+
+	<div class="class">
+		<h1>Testing ECharts</h1>
+		<div id="main" style="width: 600px; height: 400px;"></div>
+		{% for i in data %}
+		<script type="text/javascript">
+		// Initialize the echarts instance based on the prepared dom
+      	var myChart = echarts.init(document.getElementById('main'));
+		// Specify the configuration items and data for the chart
+		var option = {
+        	title: {
+          		text: 'ECharts Getting Started Example'
+        	},
+        	tooltip: {},
+        	legend: {
+          	data: ['sales']
+        	},
+        	xAxis: {
+          	data: ['Shirts', 'Cardigans', 'Chiffons', 'Pants', 'Heels', 'Socks']
+        	},
+        	yAxis: {},
+        	series: [
+          		{
+            		name: 'sales',
+            		type: 'bar',
+            		data: [{{Dates}}]
+          		}
+          	]
+      	};
+      	// Display the chart using the configuration items and data just specified.
+      	myChart.setOption(option);
+		</script>
+		{% endfor %}
+	</div>
 
 
 

@@ -83,7 +83,7 @@ def main():
 	# print(target.getNetWorkingCapital())
 	print(target.getEarnings())
 	print("-----------------------------")
-	print("Nopat:")
+	print("Nopat:")f 
 	print(target.getNopat())
 	print("-----------------------------")
 	print("Revenue:")

@@ -76,14 +76,15 @@ def main():
 	# print(fd.getRiskFreeRateEuroArea("DE", "EUR"))
 	# print(fd.getRiskFreeRateEuroArea("AT", "EUR"))
 
-	target = company.Company("MSFT")
+	ticker = inputTicker()
+	target = company.Company(ticker)
 	print(target)
 	print(target.getNopat())
 	# print(target.getInvestedCapital())
 	# print(target.getNetWorkingCapital())
 	print(target.getEarnings())
 	print("-----------------------------")
-	print("Nopat:")f 
+	print("Nopat:")
 	print(target.getNopat())
 	print("-----------------------------")
 	print("Revenue:")
@@ -96,7 +97,7 @@ def main():
 	print("-----------------------------")
 	print(target.calculateRoicByMultiplication())
 	print("-----------------------------")
-	roic = target.calculateROIC()
+	roic = target.calculateRoicByMultiplication()
 	print(type(roic))
 	print(target.getRevenue().reset_index()["Year"])
 	list_year = list(target.getRevenue().reset_index()["Year"])
@@ -107,7 +108,11 @@ def main():
 
 	df_output = pd.DataFrame(data={"Dates": list_year, "ROIC": roic, "Nopat Margin" : target.calculateNopatMargin(), "Capital Turnover" : target.calculateCapitalTurnover()})
 	print(df_output)
+	print("Data to dictionary")
 	print(toDict(df_output))
+	print("Data to json")
+	df_json = df_output.to_json(orient = 'records')
+	print(df_json)
 
 if __name__ == "__main__":
 	main()

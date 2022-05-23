@@ -1,8 +1,10 @@
 
 import pandas as pd
 import numpy as np
+from numerize import numerize as num
 
 from django.http import HttpResponseRedirect
+from django.http import JsonResponse
 from django.shortcuts import render
 
 from .forms import TickerSymbol
@@ -98,18 +100,80 @@ def validate2(request):
 	company_name = ""
 	company_sector = ""
 	company_industry = ""
-	opening_price = None
-	closing_price = None
-	price_change = None
+	opening_price = 0
+	closing_price = 0
+	price_change = 0
 	allData = []
-	ticker = None
+	ticker = ""
+	company_info = ""
+	market_cap = 0
+	market_price = 0
+	country = ""
 
 	try:
 		if request.method == 'POST':
 			ticker = request.POST["ticker"]
 			target = company.Company(ticker)
 			list_year = list(target.getRevenue().reset_index()["Year"])
-			roic = target.calculateROIC()
+			roic = target.calculateRoicByMultiplication() * 100
+			nopat_margin = target.calculateNopatMargin() * 100
+			capital_turnover = target.calculateCapitalTurnover()
+			df_output = pd.DataFrame(data={"Dates": list_year, "ROIC": roic, "NopatMargin" : nopat_margin, "CapitalTurnover" : capital_turnover})
+
+			allData = toDict(df_output)
+			context = { "data" : allData}
+
+			company_name = target.getName()
+			company_sector = target.getSector()
+			company_industry = target.getIndustry()
+			company_info = target.getBusinessDescription()
+			opening_price = target.getOpeningPrice()
+			closing_price = target.getClosingPrice()
+			price_change = np.round(( (closing_price / opening_price ) - 1 ) * 100, 2)
+			market_price = target.getMarketPrice()
+			market_cap = num.numerize(target.getMarketCap(), 2)
+			country = target.getCountry()
+
+		return render(request, 'test.html',
+			{"data" : allData,
+			"ticker" : ticker,
+			"name" : company_name,
+			"sector": company_sector,
+			"industry": company_industry,
+			"open" : opening_price,
+			"close" : closing_price,
+			"change" : price_change,
+			"info" : company_info,
+			"market_price" : market_price,
+			"market_cap": market_cap,
+			"country" : country,
+			})
+
+	except KeyError:
+		print("Invalid input")
+
+		return render(request, 'error.html')
+
+
+
+def validate3(request):
+
+	company_name = ""
+	company_sector = ""
+	company_industry = ""
+	opening_price = None
+	closing_price = None
+	price_change = None
+	allData = []
+	ticker = None
+	info = ""
+
+	try:
+		if request.method == 'POST':
+			ticker = request.POST["ticker"]
+			target = company.Company(ticker)
+			list_year = list(target.getRevenue().reset_index()["Year"])
+			roic = target.calculateRoicByMultiplication()
 			nopat_margin = target.calculateNopatMargin()
 			capital_turnover = target.calculateCapitalTurnover()
 			df_output = pd.DataFrame(data={"Dates": list_year, "ROIC": roic, "NopatMargin" : nopat_margin, "CapitalTurnover" : capital_turnover})
@@ -123,8 +187,12 @@ def validate2(request):
 			opening_price = target.getOpeningPrice()
 			closing_price = target.getClosingPrice()
 			price_change = np.round(( (closing_price / opening_price ) - 1 ) * 100, 2)
+			if (self.business_description):
+				info = self.business_description
+			else:
+				pass
 
-		return render(request, 'test.html',
+		return render(request, 'demo.html',
 			{"data" : allData,
 			"ticker" : ticker,
 			"name" : company_name,
@@ -132,13 +200,14 @@ def validate2(request):
 			"industry": company_industry,
 			"open" : opening_price,
 			"close" : closing_price,
-			"change" : price_change})
+			"change" : price_change,
+			"info" : info
+			})
 
 	except KeyError:
 		print("Invalid input")
 
 		return render(request, 'error.html')
-
 
 
 

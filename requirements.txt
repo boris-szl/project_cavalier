@@ -13,3 +13,4 @@ psycopg2==2.9.3
 yfinance==0.1.67
 django_compressor==3.1
 django-libsass=0.9
+numerize-0.12

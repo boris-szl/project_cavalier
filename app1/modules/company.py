@@ -77,11 +77,20 @@ class Company:
     def getIndustry(self):
         return self.industry
 
+    def getCountry(self):
+        return self.country
+
+    def getMarketPrice(self):
+        return self.price
+
     def getOpeningPrice(self):
         return self.open
 
     def getClosingPrice(self):
         return self.close
+
+    def getMarketCap(self):
+        return self.market_cap
 
     def getBusinessDescription(self):
         return self.business_description

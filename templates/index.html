@@ -13,7 +13,7 @@
         <link type="text/x-scss" href="{% static 'bootstrap/bootstrap.scss' %}" rel="stylesheet" media="screen">
         <link type="text/css" href="{% static 'css/style.css' %}" rel="stylesheet">
         {% endcompress %}
-
+        <link type="text/x-scss" href="{% static 'scss/custom.css }" rel="stylesheet" media="screen">
         <script src="https://kit.fontawesome.com/23a092dfca.js" crossorigin="anonymous"></script>
         <title>
 
@@ -21,7 +21,7 @@
 	</head>
 	<body>
 			<!-- HEADER -->
-			<nav class="navbar navbar-expand-lg navbar-light bg-light">
+			<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 	  			<a class="navbar-brand" href="#">
 	  				<img src="{% static 'img/logo-transparent-medium.png' %}"width="60">
 	  				<span class="#">Metrixx Labs</span>
@@ -40,18 +40,25 @@
 	      				<li class="nav-item">
 	        				<a class="nav-link" href="#about">About</a>
 	      				</li>
+                        <li class="nav-item">
+                            <a href="test" class="nav-link">Demo</a>
+                        </li>
+                        <li class="nav-item">
+                            <a href="" class="nav-link">API</a>
+                        </li>
 	    			</ul>
 	  			</div>
 			</nav>
          <!-- JUMBOTRON -->
         <div id="particles-js"></div>
 
-            <div class="jumbotron">
-		        <h1 class="display-5">Welcome to Metrixx Labs!</h1>
-		        <p class="lead">Metrixx Labs is a collection of OSINT projects</p>
+            <div class="jumbotron bg-dark text-white">
+		        <h1 class="display-7">Welcome to Metrixx Labs</h1>
+                <h2 class="display-2">In numbers we trust</h2>
+		        <p class="lead">Metrixx offers a spectrum of financial data tools which collect and analyse data for financial intelligence purposes.</p>
 		        <hr class="my-2">
 		        <p>Read more about our latest and upcoming projects.</p>
-                <a class="btn btn-primary btn-sm" href="#projects">Read more</a>
+                <a class="btn btn-primary btn-sm bg-dark" href="#projects">Read more</a>
             </div>
 
 
@@ -64,7 +71,7 @@
                         <img src="{% static 'img/moat-logo.png' %}" height="125px">
                 </div>
                 <div class="col-sm-10">
-                    <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</p>
+                    <p></p>
                 </div>
             </div>
 
@@ -75,7 +82,7 @@
 			  		<div class="input-group-prepend">
 			    		<span class="input-group-text" id="inputGroup-sizing-default">Ticker Symbol</span>
 			  		</div>
-			  			<input type="text" class="form-control" name="ticker" placeholder="e.g. MSFT" maxlength="5" required>
+			  			<input type="text" class="form-control" name="ticker" placeholder="MSFT" maxlength="5" required>
 			  			<button class="btn btn-primary" type="submit">Submit</button>
 					</div>
 				</form>
@@ -83,14 +90,18 @@
 			  <thead>
 			    <tr>
 			      <th scope="col">Date</th>
-			      <th scope="col">ROIC</th>
+			      <th scope="col">ROIC, %</th>
+                  <th scope="col">Nopat Margin, %</th>
+                  <th scope="col">Capital Turnover</th>
 			    </tr>
 			  </thead>
 			  <tbody>
 			  	{% for i in data %}
 			    <tr>
 			      	<td>{{i.Dates}}</td>
-			      	<td>{{i.Values}}</td>
+			      	<td>{{i.ROIC}}</td>
+                    <td>{{i.NopatMargin}}</td>
+                    <td>{{i.CapitalTurnover}}</td>
 			    </tr>
 			    {% endfor %}
 			  </tbody>

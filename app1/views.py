@@ -2,6 +2,7 @@
 import pandas as pd
 import numpy as np
 from numerize import numerize as num
+import json
 
 from django.http import HttpResponseRedirect
 from django.http import JsonResponse
@@ -40,62 +41,57 @@ def toDict(df):
         dict_data.append(dict(df.iloc[i]))
     return dict_data
 
+def getRoicTable(target):
+	list_year = list(target.getRevenue().reset_index()["Year"])
+	roic = target.calculateRoicByMultiplication() * 100
+	nopat_margin = target.calculateNopatMargin() * 100
+	capital_turnover = target.calculateCapitalTurnover()
+	return pd.DataFrame(data={"Dates": list_year, "ROIC": roic, "NopatMargin" : nopat_margin, "CapitalTurnover" : capital_turnover})
+
+def toListDict(df):
+	dict_data = []
+	for i in range(df.shape[0]):
+		dict_data.append(dict(df.iloc[i]))
+	return dict_data
+
 # Create your views here.
 
+def ajax_view(request):
+    ticker = "MSFT"
+    target = company.Company(ticker)
+    result = getRoicTable(target).to_json(orient="records")
+    data = json.loads(result)
+    test_data = {
+    	"msg" : "it worked!"
+    }
+    return JsonResponse(test_data)
 
-# def home(request):
+def defaultDataDisplayIndex(request):
+	# default "MSFT"
+	ticker = "MSFT"
+	target = company.Company(ticker)
 
-# 	# default is MSFT
-# 	# if request.method == 'POST':
-# 	# 	print(request.POST.get('ticker_symbol'))
-# 	# 	form = TickerSymbol(request.POST)
-# 	# 	print(form['ticker_symbol'].value())
-# 	# 	print(form.data['ticker_symbol'])
-# 	# 	if form.is_valid():
-# 	# 		print(form.cleaned_data['ticker_symbol'])
-# 	# 		print(form.isinstance.my_field)
-# 	# 		form.save()
-# 	# 	else:
-# 	# 		form = TickerSymbol()
+	company_name = target.getName()
+	company_sector = target.getSector()
+	company_industry = target.getIndustry()
+	company_info = target.getBusinessDescription()
+	opening_price = target.getOpeningPrice()
+	closing_price = target.getClosingPrice()
+	price_change = np.round(( (closing_price / opening_price ) - 1 ) * 100, 2)
+	market_price = target.getMarketPrice()
+	market_cap = num.numerize(target.getMarketCap(), 2)
+	country = target.getCountry()
 
-# 	df = pd.DataFrame(company.Company("MSFT").calculateROIC())
+	df = getRoicTable(target)
+	allData = toListDict(df)
 
-# 	allData = []
-# 	df = setDateRows1(df)
-# 	df = df.reset_index()
-# 	df = df.set_axis(["Dates", "Values"], axis=1, inplace=False)
-# 	for i in range(df.shape[0]):
-# 		allData.append(dict(df.iloc[i]))
-
-# 	context = { "data" : allData}
-
-# 	return render(request, 'index.html', context)
-
-def validate(request):
-
-	allData = []
-	ticker = None
-
-	if request.method == 'POST':
-		ticker = request.POST["ticker"]
-		# context = {
-		# 	'username' : username
-		# }
-
-		df = pd.DataFrame(company.Company(ticker).calculateROIC())
-		df = setDateRows1(df)
-		df = df.reset_index()
-		df = df.set_axis(["Dates", "Values"], axis=1, inplace=False)
-		for i in range(df.shape[0]):
-			allData.append(dict(df.iloc[i]))
-
-		context = {"data" : allData}
+	if request.method == "POST":
+		getRoicDataIndex()
 
 	return render(request, 'index.html', {"data" : allData, "ticker" : ticker })
 
-
 # modify function for extension, improvements and testing
-def validate2(request):
+def getRoicDataIndex(request):
 
 	company_name = ""
 	company_sector = ""
@@ -134,7 +130,7 @@ def validate2(request):
 			market_cap = num.numerize(target.getMarketCap(), 2)
 			country = target.getCountry()
 
-		return render(request, 'test.html',
+		return render(request, 'index.html',
 			{"data" : allData,
 			"ticker" : ticker,
 			"name" : company_name,
@@ -154,45 +150,84 @@ def validate2(request):
 
 		return render(request, 'error.html')
 
+def defaultDataDisplayDemo(request):
+	# default "MSFT"
+	ticker = "MSFT"
+	target = company.Company(ticker)
+
+	company_name = target.getName()
+	company_sector = target.getSector()
+	company_industry = target.getIndustry()
+	company_info = target.getBusinessDescription()
+	opening_price = target.getOpeningPrice()
+	closing_price = target.getClosingPrice()
+	price_change = np.round(( (closing_price / opening_price ) - 1 ) * 100, 2)
+	market_price = target.getMarketPrice()
+	market_cap = num.numerize(target.getMarketCap(), 2)
+	country = target.getCountry()
+
+	df = getRoicTable(target)
+	allData = toListDict(df)
+
+	if request.method == "POST":
+		getRoicDataDemo()
+	else:
+		return render(request, 'test.html',
+		{"data" : allData,
+		"ticker" : ticker,
+		"name" : company_name,
+		"sector": company_sector,
+		"industry": company_industry,
+		"open" : opening_price,
+		"close" : closing_price,
+		"change" : price_change,
+		"info" : company_info,
+		"market_price" : market_price,
+		"market_cap": market_cap,
+		"country" : country,
+		})
 
 
-def validate3(request):
+def getRoicDataDemo(request):
 
 	company_name = ""
 	company_sector = ""
 	company_industry = ""
-	opening_price = None
-	closing_price = None
-	price_change = None
+	opening_price = 0
+	closing_price = 0
+	price_change = 0
 	allData = []
-	ticker = None
-	info = ""
+	ticker = ""
+	company_info = ""
+	market_cap = 0
+	market_price = 0
+	country = ""
 
 	try:
 		if request.method == 'POST':
 			ticker = request.POST["ticker"]
 			target = company.Company(ticker)
 			list_year = list(target.getRevenue().reset_index()["Year"])
-			roic = target.calculateRoicByMultiplication()
-			nopat_margin = target.calculateNopatMargin()
+			roic = target.calculateRoicByMultiplication() * 100
+			nopat_margin = target.calculateNopatMargin() * 100
 			capital_turnover = target.calculateCapitalTurnover()
 			df_output = pd.DataFrame(data={"Dates": list_year, "ROIC": roic, "NopatMargin" : nopat_margin, "CapitalTurnover" : capital_turnover})
 
 			allData = toDict(df_output)
-			context = { "data" : allData}
+			context = {"data" : allData}
 
 			company_name = target.getName()
 			company_sector = target.getSector()
 			company_industry = target.getIndustry()
+			company_info = target.getBusinessDescription()
 			opening_price = target.getOpeningPrice()
 			closing_price = target.getClosingPrice()
 			price_change = np.round(( (closing_price / opening_price ) - 1 ) * 100, 2)
-			if (self.business_description):
-				info = self.business_description
-			else:
-				pass
+			market_price = target.getMarketPrice()
+			market_cap = num.numerize(target.getMarketCap(), 2)
+			country = target.getCountry()
 
-		return render(request, 'demo.html',
+		return render(request, 'test.html',
 			{"data" : allData,
 			"ticker" : ticker,
 			"name" : company_name,
@@ -201,23 +236,13 @@ def validate3(request):
 			"open" : opening_price,
 			"close" : closing_price,
 			"change" : price_change,
-			"info" : info
+			"info" : company_info,
+			"market_price" : market_price,
+			"market_cap": market_cap,
+			"country" : country,
 			})
 
 	except KeyError:
 		print("Invalid input")
 
 		return render(request, 'error.html')
-
-
-
-
-
-
-
-
-
-
-
-
-

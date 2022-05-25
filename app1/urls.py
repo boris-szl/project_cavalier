@@ -11,5 +11,6 @@ urlpatterns = [
 	path('test', views.getRoicDataDemo, name="test"),
 	path('error', views.getRoicDataIndex, name='error'),
 	path('error', views.getRoicDataDemo, name='error'),
-	path('test', views.ajax_view, name="test"),
+	path('ajax', views.ajax_view, name="ajax"),
+	path('ajax', views.json_test, name="ajax"),
 ]

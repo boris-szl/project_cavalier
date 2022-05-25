@@ -309,3 +309,13 @@ class Company:
 
     def QuarterlyROIC(self):
         return 0
+
+
+    # create tables
+    def getRoicTable(self):
+        list_year = list(self.getRevenue().reset_index()["Year"])
+        roic = self.calculateRoicByMultiplication() * 100
+        nopat_margin = self.calculateNopatMargin() * 100
+        capital_turnover = self.calculateCapitalTurnover()
+        return pd.DataFrame(data={"Dates": list_year, "ROIC": roic, "NopatMargin" : nopat_margin, "CapitalTurnover" : capital_turnover})
+

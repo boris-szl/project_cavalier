@@ -57,14 +57,13 @@ def toListDict(df):
 # Create your views here.
 
 def ajax_view(request):
-    ticker = "MSFT"
+    ticker = "V"
     target = company.Company(ticker)
     result = getRoicTable(target).to_json(orient="records")
-    data = json.loads(result)
     test_data = {
     	"msg" : "it worked!"
     }
-    return JsonResponse(test_data)
+    return JsonResponse(json.loads(result), safe=False)
 
 def defaultDataDisplayIndex(request):
 	# default "MSFT"
@@ -246,3 +245,18 @@ def getRoicDataDemo(request):
 		print("Invalid input")
 
 		return render(request, 'error.html')
+
+def json_test(request):
+	ticker = "V"
+	target = company.Company(ticker)
+	df  = getRoicTable(target)
+	json_data = df.to_json()
+	return render(request, "ajax.html", {"df" : json_data})
+
+
+# def json_tes_two (request):
+# 	ticker = "V"
+# 	target = company.Company(ticker)
+# 	df  = getRoicTable(target)
+# 	json_data = df.to_json(orient='records')
+# 	return render('ajax.html', {'df' : json_data})

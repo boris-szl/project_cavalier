@@ -1,7 +1,7 @@
 from django.db import models
 
-# Create your models here.
-class Student(models.Model):
-	name = models.CharField(max_length=200)
-	rollnum = models.IntegerField()
-	rank = models.IntegerField()
+
+# Create your models here
+class RoicData(models.Model):
+	# pandas to sql
+	data = models.CharField(max_length=255)

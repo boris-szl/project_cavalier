@@ -1,17 +1,68 @@
 import pandas as pd
 import datetime as dt
 import numpy as np
+import requests as re
+import re as r
+import json
 
+# to do
+# rename functions to conventional use
 
-def getRiskFreeRate():
-    URL = "https://www.treasury.gov/resource-center/data-chart-center/interest-rates/pages/TextView.aspx?data=yieldYear&year=2021"
+def getRiskFreeRateForAustria():
+    URL = "https://sdw.ecb.europa.eu/quickview.do?SERIES_KEY=229.IRS.M.AT.L.L40.CI.0000.EUR.N.Z"
     table = pd.read_html(URL)
-    yield_table = table[1]
-    rfr_series = yield_table["10 yr"]
-    value = rfr_series.iloc[-1]/100
-    return np.double(value)
 
-def betaData():
+def getRiskFreeRateEuroArea(country_code, currency_code):
+    # def getRiskFreeRateEuroArea():
+    #     # source: https://sdw.ecb.europa.eu/
+    #     # ID for 10 year-treasury : 229
+    #     # querly_url : https://sdw.ecb.europa.eu/quickview.do?SERIES_KEY=229
+    #     # series_key = IRS.M.AT.L.L40.CI.0000.EUR.N.Z
+    #     # country_code = AT
+    assert isinstance(country_code, str), "Only string values"
+    assert len(country_code) == 2, "Country must be two characters long"
+    assert isinstance(currency_code, str), "Only string values"
+    assert len(currency_code) == 3, "Currency must be three characters long"
+    try:
+        BASE_URL = "https://sdw.ecb.europa.eu/quickview.do?SERIES_KEY=229.IRS.M." + country_code + ".L.L40.CI.0000." + currency_code + ".N.Z"
+        data = pd.read_html(requests.get(BASE_URL, headers=headers).text)
+        table = data[5].loc[2:].reset_index(drop=True)
+        table = table.drop(columns=["obs. status"])
+        table.columns = ["Period", "Values in %"]
+        return table
+    except AssertionError as msg:
+        print(msg)
+
+# def getRiskFreeRateForNonEuroArea();
+
+# def getRiskFreeRateForEuroCountry();
+
+def getRiskFreeRateUs():
+    # returns dataframe that contains the yield of
+    # us treasury bonds with maturiites of close to ten years
+    date = dt.datetime.now().year
+    URL = "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_long_term_rate&field_tdr_date_value=" + str(date)
+    table = pd.read_html(URL)
+    return table[0].iloc[:,[0,3]]
+
+def getRiskFreeRateMonth():
+    # returns dataframe that contains teh
+    date = dt.datetime.now().year
+    URL = "https://home.treasury.gov/resource-center/data-chart-center/interest-rates/TextView?type=daily_treasury_long_term_rate&field_tdr_date_value=" + str(date)
+    table = pd.read_html(URL)
+    return table[0].iloc[:,[0,3]]
+
+def getCurrentRiskFreeRateUs():
+    # returns todays (working day) us 10-yr treasury yield
+    data = getRiskFreeRateUs()
+    return np.around(np.float32(data.iloc[-1,[1]])/100, 4)
+
+def getRawBetaData():
+    # parses taable data for Total Betas by Sector (for computing private company costs of equity) - US
+    # from NYU Stern School Of Business Professor Aswath Damodaran
+    # returns Pandas.DataFrame
+    # String values for Industry Name Column contain redundant whitespaces and ununified shortings
+    # please use the CleanedBetaData() method
     URL2 = "http://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/Betas.html"
     beta_table = pd.read_html(URL2)
     df_beta = beta_table[0]
@@ -19,8 +70,68 @@ def betaData():
     df_beta = df_beta.drop(0)
     return df_beta
 
-def unleveredBeta():
-    df = betaData().T
+# either i create a new module or i merge this with
+# getRawBetaData(), more likely to merge it with the function
+def cleaningBetaData(dataframe):
+    beta_data = dataframe
+    beta_data = beta_data.set_index('Industry Name')
+    # remove whitespace in index
+    old_index = beta_data.index
+    new_index = []
+    for i in old_index:
+        new_index.append(" ".join(i.split()))
+    # replace value in new_index
+    tuple_1 = [("Financial Svcs. (Non-bank & Insuran", "Financial Services (Non-bank  & Insurance)"),
+          ("Healthcare Information and Technol","Healthcare Information and Technology"),
+           ("Oil/Gas (Production and Exploratio", "Oil/Gas (Production and Exploration)"),
+           ("Oilfield Svcs/Equip.", "Oilfield Services/Equipment"),
+           ("R.E.I.T", "Real Estate Investment Trust"),
+           ("Restaurant/Dining", "Restaurants"),
+           ("Rubber& Tires", "Rubber & Tires"),
+          ("Semiconductor Equip", "Semiconductor Equipment"),
+          ("Software, System & Application", "Software System & Application"),
+          ("Telecom (Wireless)", "Telecommunication (Wireless)"),
+          ("Telecom. Equipment", "Telecommunication Equipment"),
+          ("Telecom. Services", "Telecommunication Services"),
+          ("Total Market (without financials)", "Total Market (excl. Financials)")]
+    for i in range(len(tuple_1)):
+        new_index = [w.replace(tuple_1[i][0], tuple_1[i][1]) for w in new_index]
+
+    # df.set_index([pd.Index([1, 2, 3, 4]), 'year'])
+    beta_data = beta_data.set_index([pd.Index(new_index)])
+    return beta_data
+
+def getCleanedBetaData():
+    beta_data = getRawBetaData()
+    beta_data = beta_data.set_index('Industry Name')
+    # remove whitespace in index
+    old_index = beta_data.index
+    new_index = []
+    for i in old_index:
+        new_index.append(" ".join(i.split()))
+    # replace value in new_index
+    tuple_1 = [("Financial Svcs. (Non-bank & Insuran", "Financial Services (Non-bank  & Insurance)"),
+          ("Healthcare Information and Technol","Healthcare Information and Technology"),
+           ("Oil/Gas (Production and Exploratio", "Oil/Gas (Production and Exploration)"),
+           ("Oilfield Svcs/Equip.", "Oilfield Services/Equipment"),
+           ("R.E.I.T", "Real Estate Investment Trust"),
+           ("Restaurant/Dining", "Restaurants"),
+           ("Rubber& Tires", "Rubber & Tires"),
+          ("Semiconductor Equip", "Semiconductor Equipment"),
+          ("Software, System & Application", "Software System & Application"),
+          ("Telecom (Wireless)", "Telecommunication (Wireless)"),
+          ("Telecom. Equipment", "Telecommunication Equipment"),
+          ("Telecom. Services", "Telecommunication Services"),
+          ("Total Market (without financials)", "Total Market (excl. Financials)")]
+    for i in range(len(tuple_1)):
+        new_index = [w.replace(tuple_1[i][0], tuple_1[i][1]) for w in new_index]
+
+    # df.set_index([pd.Index([1, 2, 3, 4]), 'year'])
+    beta_data = beta_data.set_index([pd.Index(new_index)])
+    return beta_data
+
+def getUnleveredBeta():
+    df = getRawBetaData().T
     df = df.iloc[[0,5,15,14,13,12,11]]
     df = df.T
     df = df.set_index('Industry Name')
@@ -32,14 +143,24 @@ def unleveredBeta():
     df = df.rename(index={"Software  (System & Application)":"Software, System & Application"})
     return df
 
+def getUnleveredCleanedBeta():
+    df = getCleanedBetaData().T
+    df = df.iloc[[4,13,12,11,10]]
+    df = df.T
+    dates = []
+    for j in range(5):
+        dates.append(dt.date.today().year-j)
+    df.set_axis(dates, axis="columns", inplace=True)
+    return df
+
 def getIndustryNames():
     return betaData()
 
-def getUnleveredBeta(industry="Total Market", year=dt.date.today().year):
-    data = unleveredBeta()
+def getSpecifiedUnleveredBeta(industry="Total Market", year=dt.date.today().year):
+    data = getUnleveredBeta()
     return np.double(data.loc[industry,year])
 
-def capitalCosts():
+def getCapitalCosts():
     URL4 = "http://pages.stern.nyu.edu/~adamodar/New_Home_Page/datafile/wacc.html"
     coc_table = pd.read_html(URL4)
     df_coc = coc_table[0]
@@ -56,7 +177,7 @@ def getCostOfEquity(industry="Total Market"):
         return numerical_value
     else:
         return df["Cost of Equity"]
-    
+
 def getMarketCostOfCapital():
     df = capitalCosts()
     return np.double(df["Cost of Capital"][-2].strip("%"))/100
@@ -103,20 +224,26 @@ def getERP():
 def getCountryERP(country='United States'):
     data = getERP().set_index("Country")
     value = data.T[country].to_numpy()
-    return np.double(value[0].strip('%'))/100#
+    return np.double(value[0].strip('%'))/100
 
 def calculateWacc(industry='Total Market', country='United States', year=dt.date.today().year):
     # get risk free rate
-    risk_free_rate = getRiskFreeRate()
+    risk_free_rate = getCurrentRiskFreeRate()
     # get countries equity risk premium
     risk_premium = getCountryERP(country)
-    # todays unlevered beta 
+    # todays unlevered beta
     unlevered_beta = getUnleveredBeta(industry,year)
     # cost of equity
     equity_cost = risk_premium * unlevered_beta + risk_free_rate
     post_tax_debt_cost = getCostOfDebt()
     result = equity_cost + post_tax_debt_cost
-    return result#
+    return result
 
 def calculateWacc_2(industry='Total Market', country='United States', year=dt.date.today().year):
     return getRiskFreeRate() + getCountryERP(country) * getUnleveredBeta(industry,year) + getCostOfDebt()
+
+
+
+
+
+

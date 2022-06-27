@@ -21,4 +21,14 @@ def ColsToInt(df):
     df2 = df.set_axis([int(x) for x in col_list], axis=1, inplace=False)
     return df2
 
-# removing redundant whitespace
+def removeWhitespaceInIndex(dataframe):
+    # first we check if the index is a string or an integer or float
+    if ( (dataframe.index.is_integer or dataframe.index.is_float) == True):
+        raise Error("Index should contain string values")
+    else:
+        # iterate over dataframe
+        # locate redundant whitespace in col "name"
+        # remove whitespace with
+        for i, row in dataframe.iterrows():
+            " ".join(i.split())
+    return dataframe

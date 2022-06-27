@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'compressor',
 ]
 
 MIDDLEWARE = [
@@ -87,10 +88,12 @@ WSGI_APPLICATION = 'project.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE' : 'django.db.backends.postgresql_pyscopg2',
-        'NAME' : 'base',
-        'USERNAME' : 'postgres',
-        'PASSWORD' : '',
+        'ENGINE' : 'django.db.backends.postgresql',
+        'NAME' : 'metrixx',
+        'USERNAME' : 'boris.szelcsanyi',
+        'PASSWORD' : 'jqee55jqee55',
+        'HOST' : 'localhost',
+        'PORT' : '5432',
         }
     }
 
@@ -127,12 +130,31 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
-STATIC_URL = 'static/'
-STATIC_ROOT = os.path.join(PROJECT_ROOT, 'static')
 
+PROJECT_ROOT = os.path.dirname(os.path.abspath(__file__))
+STATIC_URL = '/static/'
+
+# useless in development 
+STATIC_ROOT = os.path.join(BASE_DIR, 'static')
+# STATICFILES_DIRS = [os.path.join(BASE_DIR, 'staticfiles')]
+# STATICFILES_FINDERS = ['compressor.finders.CompressorFinder']
+
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'compressor.finders.CompressorFinder',
+)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# compress precompilers
+# Compresses linked and inline JavaScript or CSS into a single cached file.
+COMPRESS_PRECOMPILERS = (
+            ('text/x-scss', 'django_libsass.SassCompiler'),
+        )
+COMPRESS_ROOT = os.path.join(BASE_DIR, 'static')

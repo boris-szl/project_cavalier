@@ -1,0 +1,29 @@
+
+/* ---- particles.js container ---- */
+html {
+  scroll-behavior: smooth;
+ }
+
+canvas {
+  display: block;
+  vertical-align: bottom;
+}
+
+
+#particles-js {
+  position: absolute;
+  width: 100%;
+  height: 40%;
+}
+
+.jumbotron {
+  height: auto;
+}
+
+.cotainer container-moat {
+    height: 400px;
+}
+
+.container-about {
+    height: 225px;
+}
